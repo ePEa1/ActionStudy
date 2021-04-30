@@ -22,7 +22,6 @@ public class PCMovingAction : BaseAction
 
     public override void UpdateAction()
     {
-        Moving();
         _animator.SetFloat("Moving", Mathf.Min(1, _animator.GetFloat("Moving") + _runAniSpeed * Time.deltaTime));
     }
 
@@ -37,18 +36,19 @@ public class PCMovingAction : BaseAction
     {
         if (dir == Vector3.zero)
             _owner.ChangeAction("Idle");
+        else Moving(dir);
     }
     #endregion
 
-    void Moving()
+    void Moving(Vector3 dir)
     {
         PlayerManager pm = _owner as PlayerManager;
 
-        Vector3 moveDis = pm.Cam.transform.rotation * new Vector3(_controller.widthMoving, 0, _controller.verticalMoving);
+        Vector3 moveDis = pm.Cam.transform.rotation * new Vector3(dir.x, 0, dir.z).normalized;
         moveDis.y = 0;
 
-        _owner.transform.position = FixedMoveVector(_owner.transform.position, moveDis.normalized * Time.deltaTime * _moveSpeed, _wall);
-        _animator.transform.rotation = Quaternion.Slerp(_animator.transform.rotation, Quaternion.LookRotation(moveDis.normalized), Time.deltaTime * _rotSpeed);
+        _owner.transform.position = FixedMoveVector(_owner.transform.position, moveDis * Time.deltaTime * _moveSpeed, _wall);
+        _animator.transform.rotation = Quaternion.Slerp(_animator.transform.rotation, Quaternion.LookRotation(moveDis), Time.deltaTime * _rotSpeed);
     }
 
     public void PlayFootstep()
