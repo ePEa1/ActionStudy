@@ -15,6 +15,8 @@ public abstract class BaseAction : MonoBehaviour
     /// </summary>
     public abstract void UpdateAction();
 
+    public virtual void FixedUpdateAction() { }
+
     public virtual void EndAction() { }
 
     //public abstract void ChangeAction();

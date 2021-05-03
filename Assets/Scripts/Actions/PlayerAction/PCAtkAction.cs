@@ -13,10 +13,45 @@ public class PCAtkAction : BaseAction
 
     bool _finishAtk = false;
 
-    public override void UpdateAction() { }
+    bool _isRotate = false;
+
+
+    #region AttackDatas
+    [Header("Atk Datas")]
+    [SerializeField] AtkStatDataAsset[] _atkStats;
+    [SerializeField] AtkEffDataAsset[] _atkEffs;
+    [SerializeField] int _maxCombo = 0;
+    float _timer = 0.0f;
+    int _nowCombo = 0;
+
+    ParticleSystem[] _atkParticle;
+    int _particleNum = 0;
+    float[] _playParticleTime;
+
+    #endregion
+
+    public override void UpdateAction() 
+    {
+        if (_isRotate)
+        {
+            _isRotate = false;
+            PlayerManager pm = _owner as PlayerManager;
+            _animator.transform.rotation = Quaternion.Euler(0.0f, pm.Cam.transform.eulerAngles.y, 0.0f);
+        }
+    }
+
+    public override void FixedUpdateAction()
+    {
+        _timer += Time.deltaTime;
+        if (_particleNum < _playParticleTime.Length)
+            if (_timer >= _playParticleTime[_particleNum])
+                _atkParticle[_particleNum++].Play();
+    }
 
     public override void StartAction()
     {
+        _nowCombo = 0;
+        _particleNum = 0;
         _finishAtk = false;
         PlayAtk();
     }
@@ -68,7 +103,48 @@ public class PCAtkAction : BaseAction
 
     void PlayAtk()
     {
+        _timer = 0.0f;
+        _particleNum = 0;
+
         _animator.SetBool("IsAtk", true);
         _animator.SetTrigger("Atk");
+        _isRotate = true;
+
+        # region Create Effect
+        
+        _atkParticle = new ParticleSystem[_atkEffs[_nowCombo]._effDatas.Length];
+        _playParticleTime = new float[_atkParticle.Length];
+
+        for(int i=0;i<_atkParticle.Length;i++)
+        {
+            AtkEffData eData = _atkEffs[_nowCombo]._effDatas[i];
+            _playParticleTime[i] = eData._spawnTiming;
+            GameObject eff = Instantiate(_atkEffs[_nowCombo]._effDatas[i]._effObject);
+
+            PlayerManager pm = _owner as PlayerManager;
+            Vector3 dirVector = pm.Cam.transform.rotation * Vector3.forward;
+            dirVector.y = 0;
+            dirVector = dirVector.normalized;
+            Quaternion dirQua = Quaternion.LookRotation(dirVector);
+
+            if (eData._isChildren)
+            {
+                eff.transform.parent = _owner.transform;
+                eff.transform.localPosition = eData._position;
+            }
+            else
+            {
+                eff.transform.position = _owner.transform.position + dirQua * eData._position;
+            }
+            eff.transform.rotation = dirQua * Quaternion.Euler(eData._angle);
+
+            _atkParticle[i] = eff.GetComponent<ParticleSystem>();
+            Destroy(eff.gameObject, eData._spawnTiming + 1.0f);
+        }
+        
+        #endregion
+
+
+        _nowCombo = _nowCombo + 1 >= _maxCombo ? 0 : _nowCombo + 1;
     }
 }

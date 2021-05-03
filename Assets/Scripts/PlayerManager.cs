@@ -37,6 +37,11 @@ public class PlayerManager : CharacterManager
         UpdateAction();
     }
 
+    private void FixedUpdate()
+    {
+        FixedUpdateAction();
+    }
+
     protected override void ManagerSetup()
     {
         _stats = new Dictionary<string, int>();

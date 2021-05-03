@@ -644,6 +644,13 @@ MonoBehaviour:
   _owner: {fileID: 631934665}
   _animator: {fileID: 502686488}
   _stat: {fileID: 631934667}
+  _atkStats: []
+  _atkEffs:
+  - {fileID: 11400000, guid: 983753a68e9d5bf4eb1c9bb561d9c754, type: 2}
+  - {fileID: 11400000, guid: 6a2a87275e3f8ca458c904331ab13e2c, type: 2}
+  - {fileID: 11400000, guid: 8f1d0eda7d91fbd44bc972b30fc5f9fa, type: 2}
+  - {fileID: 11400000, guid: e394bc80dfcd41a449327aa4e55ba324, type: 2}
+  _maxCombo: 4
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0

@@ -46,6 +46,7 @@ public class PCMovingAction : BaseAction
 
         Vector3 moveDis = pm.Cam.transform.rotation * new Vector3(dir.x, 0, dir.z).normalized;
         moveDis.y = 0;
+        moveDis = moveDis.normalized;
 
         _owner.transform.position = FixedMoveVector(_owner.transform.position, moveDis * Time.deltaTime * _moveSpeed, _wall);
         _animator.transform.rotation = Quaternion.Slerp(_animator.transform.rotation, Quaternion.LookRotation(moveDis), Time.deltaTime * _rotSpeed);
@@ -55,6 +56,5 @@ public class PCMovingAction : BaseAction
     {
         _sfx.clip = _clip[Random.Range(0, _clip.Length - 1)];
         _sfx.Play();
-        Debug.Log("foot");
     }
 }

@@ -23,6 +23,7 @@ public abstract class CharacterManager : Actor
     protected abstract void ManagerSetup();
 
     protected void UpdateAction()=> _nowAction.UpdateAction();
+    protected void FixedUpdateAction() => _nowAction.FixedUpdateAction();
 
     public void SetAction(string action)
     {
@@ -33,7 +34,6 @@ public abstract class CharacterManager : Actor
 
     public void ChangeAction(string action)
     {
-        Debug.Log(action);
         _nowAction.EndAction();
         SetAction(action);
     }
