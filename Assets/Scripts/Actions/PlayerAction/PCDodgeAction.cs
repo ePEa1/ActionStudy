@@ -25,6 +25,8 @@ public class PCDodgeAction : BaseAction
 
     bool _getInput = false;
 
+    string _nextState = "Idle";
+
     public override void UpdateAction()
     {
         PlayDodge();
@@ -33,6 +35,8 @@ public class PCDodgeAction : BaseAction
     public override void StartAction()
     {
         SetDodgeAnim();
+
+        _nextState = "Idle";
 
         _getInput = false;
         _time = 0.0f;
@@ -50,12 +54,24 @@ public class PCDodgeAction : BaseAction
         _finishCheck = false;
     }
 
+    public override void CheckInputKeys(InputKey key, InputState state)
+    {
+        if (_getInput)
+        {
+            if (key == InputKey.NORMALATK && state == InputState.PRESSED)
+                _nextState = "Atk";
+        }
+    }
+
     public override void CheckMoveDir(Vector3 dir)
     {
-        if (_finishCheck)
+        if (_getInput)
         {
-            if (dir == Vector3.zero) _owner.ChangeAction("Idle");
-            else _owner.ChangeAction("Moving");
+            if (_nextState != "Atk")
+            {
+                if (dir == Vector3.zero) _nextState = "Idle";
+                else _nextState = "Moving";
+            }
         }
 
         if (_dodgeDir == Vector3.zero)
@@ -64,12 +80,14 @@ public class PCDodgeAction : BaseAction
         }
     }
 
+    #region Animation Events
     public void FinishDodge()
     {
-        _finishCheck = true;
+        _owner.ChangeAction(_nextState);
     }
 
     public void GetInput() => _getInput = true;
+    #endregion
 
     void SetDodgeAnim()
     {
@@ -96,5 +114,5 @@ public class PCDodgeAction : BaseAction
         float pow = (_dodgeAC.Evaluate(_time) - _dodgeAC.Evaluate(_beforeTime)) * _dodgePow;
         _owner.transform.position = FixedMoveVector(_owner.transform.position, _dodgeDir * pow, _wall);
         _beforeTime = _time;
-    }    
+    }
 }
