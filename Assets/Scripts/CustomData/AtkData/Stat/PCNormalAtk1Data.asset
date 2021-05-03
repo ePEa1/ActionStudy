@@ -12,11 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d67e01e3dc974c4183bd32237462820, type: 3}
   m_Name: PCNormalAtk1Data
   m_EditorClassIdentifier: 
-  _moveRange: 0
-  _moveSpeed: 0
+  _moveRange: 0.9
   _moveCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 12.5
+      outSlope: 12.5
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.08
+      value: 1
+      inSlope: 12.5
+      outSlope: 0
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4

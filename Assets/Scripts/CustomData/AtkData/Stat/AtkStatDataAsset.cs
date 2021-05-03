@@ -8,7 +8,6 @@ public class AtkStatDataAsset : ScriptableObject
 {
     [Header("Moving Data")]
     public float _moveRange;
-    public float _moveSpeed;
     public AnimationCurve _moveCurve;
 
     [Header("Damage Data")]

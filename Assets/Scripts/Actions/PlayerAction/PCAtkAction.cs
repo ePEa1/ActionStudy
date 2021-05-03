@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using static ActorController;
+using static CustomPhysics;
 
 public class PCAtkAction : BaseAction
 {
@@ -27,8 +28,11 @@ public class PCAtkAction : BaseAction
     ParticleSystem[] _atkParticle;
     int _particleNum = 0;
     float[] _playParticleTime;
-
+    float _oldTime = 0.0f;
+    float _moveTimer = 0.0f;
     #endregion
+
+    [SerializeField] LayerMask _wall;
 
     public override void UpdateAction() 
     {
@@ -38,6 +42,15 @@ public class PCAtkAction : BaseAction
             PlayerManager pm = _owner as PlayerManager;
             _animator.transform.rotation = Quaternion.Euler(0.0f, pm.Cam.transform.eulerAngles.y, 0.0f);
         }
+
+        _moveTimer += Time.deltaTime;
+        AtkStatDataAsset data = _atkStats[_nowCombo];
+        float speed = (data._moveCurve.Evaluate(_moveTimer) - data._moveCurve.Evaluate(_oldTime)) * data._moveRange;
+        
+        Vector3 moveRay = _animator.transform.rotation * Vector3.forward;
+        Debug.Log(moveRay);
+        _owner.transform.position = FixedMoveVector(_owner.transform.position, moveRay * speed, _wall);
+        _oldTime = _moveTimer;
     }
 
     public override void FixedUpdateAction()
@@ -45,7 +58,11 @@ public class PCAtkAction : BaseAction
         _timer += Time.deltaTime;
         if (_particleNum < _playParticleTime.Length)
             if (_timer >= _playParticleTime[_particleNum])
+            {
+                if (!_atkEffs[_nowCombo]._effDatas[_particleNum]._isChildren)
+                    _atkParticle[_particleNum].transform.parent = null;
                 _atkParticle[_particleNum++].Play();
+            }
     }
 
     public override void StartAction()
@@ -91,6 +108,7 @@ public class PCAtkAction : BaseAction
     {
         if (_isNextAtk)
         {
+            _nowCombo = _nowCombo + 1 >= _maxCombo ? 0 : _nowCombo + 1;
             _isNextAtk = false;
             _nextAtkOk = false;
             PlayAtk();
@@ -104,6 +122,8 @@ public class PCAtkAction : BaseAction
     void PlayAtk()
     {
         _timer = 0.0f;
+        _moveTimer = 0.0f;
+        _oldTime = 0.0f;
         _particleNum = 0;
 
         _animator.SetBool("IsAtk", true);
@@ -127,15 +147,18 @@ public class PCAtkAction : BaseAction
             dirVector = dirVector.normalized;
             Quaternion dirQua = Quaternion.LookRotation(dirVector);
 
-            if (eData._isChildren)
-            {
-                eff.transform.parent = _owner.transform;
-                eff.transform.localPosition = eData._position;
-            }
-            else
-            {
-                eff.transform.position = _owner.transform.position + dirQua * eData._position;
-            }
+            eff.transform.parent = _owner.transform;
+            eff.transform.localPosition = eData._position;
+
+            //if (eData._isChildren)
+            //{
+            //    eff.transform.parent = _owner.transform;
+            //    eff.transform.localPosition = eData._position;
+            //}
+            //else
+            //{
+            //    eff.transform.position = _owner.transform.position + dirQua * eData._position;
+            //}
             eff.transform.rotation = dirQua * Quaternion.Euler(eData._angle);
 
             _atkParticle[i] = eff.GetComponent<ParticleSystem>();
@@ -143,8 +166,5 @@ public class PCAtkAction : BaseAction
         }
         
         #endregion
-
-
-        _nowCombo = _nowCombo + 1 >= _maxCombo ? 0 : _nowCombo + 1;
     }
 }
