@@ -19,8 +19,6 @@ public abstract class BaseAction : MonoBehaviour
 
     public virtual void EndAction() { }
 
-    //public abstract void ChangeAction();
-
     public virtual void CheckInputKeys(ActorController.InputKey key, ActorController.InputState state) { }
 
     public virtual void CheckMoveDir(Vector3 dir) { }

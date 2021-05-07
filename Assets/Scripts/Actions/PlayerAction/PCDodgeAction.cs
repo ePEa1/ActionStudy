@@ -21,8 +21,6 @@ public class PCDodgeAction : BaseAction
     float _time = 0.0f;
     float _beforeTime = 0.0f;
 
-    bool _finishCheck = false;
-
     bool _getInput = false;
 
     string _nextState = "Idle";
@@ -51,7 +49,6 @@ public class PCDodgeAction : BaseAction
     public override void EndAction()
     {
         _animator.SetBool("IsDodge", false);
-        _finishCheck = false;
     }
 
     public override void CheckInputKeys(InputKey key, InputState state)
@@ -65,13 +62,10 @@ public class PCDodgeAction : BaseAction
 
     public override void CheckMoveDir(Vector3 dir)
     {
-        if (_getInput)
+        if (_nextState != "Atk")
         {
-            if (_nextState != "Atk")
-            {
-                if (dir == Vector3.zero) _nextState = "Idle";
-                else _nextState = "Moving";
-            }
+            if (dir == Vector3.zero) _nextState = "Idle";
+            else _nextState = "Moving";
         }
 
         if (_dodgeDir == Vector3.zero)

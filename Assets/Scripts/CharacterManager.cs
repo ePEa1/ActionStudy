@@ -4,31 +4,31 @@ using UnityEngine;
 
 public abstract class CharacterManager : Actor
 {
-    [Header("System")]
-    [SerializeField] protected Animator _animator;
-
     [Header("Action Setting")]
-    [SerializeField] protected BaseAction[] _actions;
-    [SerializeField] protected string[] _statName;
-    [SerializeField] protected string _startStat;
+    [SerializeField] ActionData[] _actions;
+    [SerializeField] string _startStat;
 
-    protected Dictionary<string, int> _stats;
-    protected string _nowStat;
+    Dictionary<string, BaseAction> _stats;
+    string _nowStat;
     
     protected BaseAction _nowAction;
 
-    /// <summary>
-    /// _stats에 액션 이름 넣고 _nowStat이랑 _nowAction 초기값 셋팅해주기
-    /// </summary>
-    protected abstract void ManagerSetup();
+    protected virtual void SetupActions()
+    {
+        _stats = new Dictionary<string, BaseAction>();
+        for (int i = 0; i < _actions.Length; i++)
+            _stats.Add(_actions[i]._statName, _actions[i]._action);
 
-    protected void UpdateAction()=> _nowAction.UpdateAction();
-    protected void FixedUpdateAction() => _nowAction.FixedUpdateAction();
+        SetAction(_startStat);
+    }
+
+    protected void Update()=> _nowAction.UpdateAction();
+    protected void FixedUpdate() => _nowAction.FixedUpdateAction();
 
     public void SetAction(string action)
     {
         _nowStat = action;
-        _nowAction = _actions[_stats[action]];
+        _nowAction = _stats[action];
         _nowAction.StartAction();
     }
 
@@ -37,4 +37,11 @@ public abstract class CharacterManager : Actor
         _nowAction.EndAction();
         SetAction(action);
     }
+}
+
+[System.Serializable]
+public class ActionData
+{
+    public string _statName;
+    public BaseAction _action;
 }
