@@ -15,7 +15,7 @@ MonoBehaviour:
   _effDatas:
   - _effObject: {fileID: 9086203238315934963, guid: cd776cbd0eda9d348a6ab0b997a35856,
       type: 3}
-    _spawnTiming: 0.4
+    _spawnTiming: 0.36
     _isChildren: 0
-    _position: {x: 0, y: 1, z: 0}
+    _position: {x: 0, y: 1, z: 0.7}
     _angle: {x: 0, y: 0, z: 0}

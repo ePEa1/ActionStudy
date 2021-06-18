@@ -22,4 +22,5 @@ public class DamageData
     public Vector3 _atkRange = Vector3.one;
     public float _hitTiming = 0.0f;
     public float _knockPower = 0.0f;
+    public AudioClip _atkSFX;
 }

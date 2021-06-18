@@ -11,7 +11,6 @@ public class CustomPhysics : MonoBehaviour
         float dis = Vector3.Distance(Vector3.zero, ray);
 
         Vector3 fixedPos = startPos + ray;
-
         RaycastHit hit;
         if (Physics.Raycast(startPos, dir, out hit, dis, layer))
         {

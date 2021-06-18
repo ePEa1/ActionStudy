@@ -16,6 +16,4 @@ public class PlayerManager : CharacterManager
 
     public override void OnDodge(InputState state) => _nowAction.CheckInputKeys(InputKey.DODGE, state);
     #endregion
-
-    void Awake() => SetupActions();
 }

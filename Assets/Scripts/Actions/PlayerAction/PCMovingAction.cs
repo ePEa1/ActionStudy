@@ -7,7 +7,6 @@ using static ActorController;
 
 public class PCMovingAction : BaseAction
 {
-    [SerializeField] PlayerInputKey _controller;
     [SerializeField] PlayerStat _stat;
 
     [Header("Action Data")]

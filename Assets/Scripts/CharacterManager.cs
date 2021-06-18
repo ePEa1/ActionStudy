@@ -4,6 +4,10 @@ using UnityEngine;
 
 public abstract class CharacterManager : Actor
 {
+    [Header("Character Stat")]
+    [SerializeField] float _maxHp = 100;
+    public float _nowHp { get; set; }
+
     [Header("Action Setting")]
     [SerializeField] ActionData[] _actions;
     [SerializeField] string _startStat;
@@ -12,6 +16,8 @@ public abstract class CharacterManager : Actor
     string _nowStat;
     
     protected BaseAction _nowAction;
+
+    [SerializeField] Animator _animator;
 
     protected virtual void SetupActions()
     {
@@ -22,7 +28,16 @@ public abstract class CharacterManager : Actor
         SetAction(_startStat);
     }
 
-    protected void Update()=> _nowAction.UpdateAction();
+    void Awake()
+    {
+        _nowHp = _maxHp;
+        SetupActions();
+    }
+    protected void Update()
+    {
+        _nowAction.UpdateAction();
+        _animator.transform.position = transform.position;
+    }
     protected void FixedUpdate() => _nowAction.FixedUpdateAction();
 
     public void SetAction(string action)

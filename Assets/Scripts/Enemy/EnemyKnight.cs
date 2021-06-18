@@ -4,12 +4,6 @@ using UnityEngine;
 
 public class EnemyKnight : CharacterManager
 {
-
-    public void Awake()
-    {
-        SetupActions();
-    }
-
     private void OnEnable()
     {
         

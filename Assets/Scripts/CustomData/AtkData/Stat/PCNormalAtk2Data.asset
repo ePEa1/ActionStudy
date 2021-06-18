@@ -55,4 +55,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _damDatas: []
+  _damDatas:
+  - _power: 1.5
+    _atkCenter: {x: 0, y: 0.8, z: 0.5}
+    _atkRange: {x: 4.5, y: 1, z: 4.5}
+    _hitTiming: 0.1
+    _knockPower: 1.3
+    _atkSFX: {fileID: 8300000, guid: 0b8d34c55ffe6324098362484f6d5b93, type: 3}
