@@ -25,6 +25,7 @@ public class EKDamage : BaseAction, ITakeDamage
     public override void StartAction()
     {
         _owner.transform.position += _damData._knock;
+        _animator.SetTrigger("Damage");
 
         _ac.clip = _clip[Random.Range(0, _clip.Length)];
         _ac.Play();
@@ -41,9 +42,16 @@ public class EKDamage : BaseAction, ITakeDamage
     {
         _damData = data;
 
+        _animator.transform.rotation = Quaternion.LookRotation(_damData._knock.normalized * -1);
         _owner._nowHp = Mathf.Max(0, _owner._nowHp - _damData._damPow);
         Debug.Log("Damage : " + _damData._damPow);
         
         _owner.ChangeAction("Damage");
+    }
+
+    public void EvtEndDamage()
+    {
+        _owner.ChangeAction("Moving");
+        _animator.SetTrigger("EndDamage");
     }
 }

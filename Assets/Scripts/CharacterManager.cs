@@ -1,23 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public abstract class CharacterManager : Actor
 {
     [Header("Character Stat")]
-    [SerializeField] float _maxHp = 100;
-    public float _nowHp { get; set; }
+    [SerializeField] protected float _maxHp = 100;
+
+    float _nowhp;
+    public float _nowHp { get { return _nowhp; } set { ChangeHp(value); } }
 
     [Header("Action Setting")]
     [SerializeField] ActionData[] _actions;
     [SerializeField] string _startStat;
 
     Dictionary<string, BaseAction> _stats;
-    string _nowStat;
+    protected string _nowStat;
     
     protected BaseAction _nowAction;
 
     [SerializeField] Animator _animator;
+
+    public List<Action<float>> _damageEvents = new List<Action<float>>();
 
     protected virtual void SetupActions()
     {
@@ -28,7 +33,15 @@ public abstract class CharacterManager : Actor
         SetAction(_startStat);
     }
 
-    void Awake()
+    protected virtual void ChangeHp(float hp)
+    {
+        if (_nowhp > hp)
+            foreach (Action<float> damEvent in _damageEvents)
+                damEvent.Invoke(hp);
+        _nowhp = hp;
+    }
+
+    public void Awake()
     {
         _nowHp = _maxHp;
         SetupActions();

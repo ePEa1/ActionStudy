@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class PlayerAniEvent : MonoBehaviour
+public class EnemyAniEvent : MonoBehaviour
 {
     [SerializeField] UnityEvent[] _movingEvent;
     public enum MovingEnum
@@ -11,11 +11,10 @@ public class PlayerAniEvent : MonoBehaviour
         FOOTSTEP
     }
 
-    [SerializeField] UnityEvent[] _dodgeEvent;
-    public enum DodgeEnum
+    [SerializeField] UnityEvent[] _damageEvent;
+    public enum DamageEnum
     {
-        GETINPUT,
-        FINISHDODGE
+        EndDamage
     }
 
     [SerializeField] UnityEvent[] _atkEvent;
@@ -26,6 +25,6 @@ public class PlayerAniEvent : MonoBehaviour
     }
 
     public void PlayMovingEvt(MovingEnum e) => _movingEvent[(int)e].Invoke();
-    public void PlayDodgeEvt(DodgeEnum e) => _dodgeEvent[(int)e].Invoke();
+    public void PlayDamageEvt(DamageEnum e) => _damageEvent[(int)e].Invoke();
     public void PlayAtkEvt(AtkEnum e) => _atkEvent[(int)e].Invoke();
 }

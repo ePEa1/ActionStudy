@@ -55,7 +55,7 @@ public class PCAtkAction : BaseAction
         _moveTimer += Time.deltaTime;
         AtkStatDataAsset data = _atkStats[_nowCombo];
         float speed = (data._moveCurve.Evaluate(_moveTimer) - data._moveCurve.Evaluate(_beforeTime)) * data._moveRange;
-        
+
         Vector3 moveRay = _animator.transform.rotation * Vector3.forward;
         //Debug.Log(moveRay);
         _owner.transform.position = FixedMoveVector(_owner.transform.position, moveRay * speed, _wall);
@@ -116,6 +116,8 @@ public class PCAtkAction : BaseAction
         _nowAtk = 0;
         _particleNum = 0;
         _finishAtk = false;
+        _animator.SetBool("IsAtk", true);
+        _animator.SetTrigger("FirstAtk");
         PlayAtk();
     }
 
@@ -124,6 +126,7 @@ public class PCAtkAction : BaseAction
         _isNextAtk = false;
         _nextAtkOk = false;
         _finishAtk = false;
+        _animator.ResetTrigger("FirstAtk");
         _animator.SetBool("IsAtk", false);
         _animator.ResetTrigger("Atk");
     }
@@ -132,7 +135,7 @@ public class PCAtkAction : BaseAction
     {
         //다음 공격 예약
         if (key == InputKey.NORMALATK && state == InputState.PRESSED)
-            if (_nextAtkOk && !_isNextAtk) _isNextAtk = true;
+            if (/*_nextAtkOk && */!_isNextAtk) _isNextAtk = true;
 
         //회피(공격 캔슬 가능)
         if (key == InputKey.DODGE && state == InputState.PRESSED && _stat._isDodgeOk)
@@ -157,11 +160,15 @@ public class PCAtkAction : BaseAction
             _nowCombo = _nowCombo + 1 >= _maxCombo ? 0 : _nowCombo + 1;
             _isNextAtk = false;
             _nextAtkOk = false;
+            _animator.SetBool("IsAtk", true);
+            _animator.SetTrigger("Atk");
             PlayAtk();
         }
         else
         {
             _finishAtk = true;
+            _animator.SetBool("IsAtk", false);
+            _animator.ResetTrigger("Atk");
         }
     }
 
@@ -173,8 +180,7 @@ public class PCAtkAction : BaseAction
         _particleNum = 0;
         _nowAtk = 0;
 
-        _animator.SetBool("IsAtk", true);
-        _animator.SetTrigger("Atk");
+        
         _isRotate = true;
 
         # region Create Effect

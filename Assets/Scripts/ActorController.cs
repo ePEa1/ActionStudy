@@ -32,9 +32,12 @@ public class ActorController : MonoBehaviour
 
     void Update()
     {
-        CheckMoveDirection();
-        CheckActionKey(_keyNormalAtk, _useActor.OnNormalAtk);
-        CheckActionKey(_keyDodge, _useActor.OnDodge);
+        if (_useActor != null)
+        {
+            CheckMoveDirection();
+            CheckActionKey(_keyNormalAtk, _useActor.OnNormalAtk);
+            CheckActionKey(_keyDodge, _useActor.OnDodge);
+        }
     }
 
     void CheckMoveDirection()
