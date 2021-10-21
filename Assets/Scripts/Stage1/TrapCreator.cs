@@ -26,13 +26,13 @@ public class TrapCreator : MonoBehaviour
             if (_data[_count]._time <= _time)
             {
                 foreach (CreateData data in _data[_count]._traps)
-                    CreateTrap(data);
+                    CreateTrap(_data[_count], data);
                 _count++;
             }
         }
     }
 
-    void CreateTrap(CreateData data)
+    void CreateTrap(TimingData time, CreateData data)
     {
         Transform obj;
         PoolData pData;
@@ -41,17 +41,25 @@ public class TrapCreator : MonoBehaviour
             case PoolType.FloorTrap:
                 pData = _objectPools[(int)PoolType.FloorTrap];
                 obj = pData._poolObject.GetChild(pData._count);
-                obj.position = data._pos;
-                obj.gameObject.SetActive(true);
                 break;
 
             default:
                 pData = _objectPools[(int)PoolType.WallTrap];
                 obj = pData._poolObject.GetChild(pData._count);
-                obj.position = data._pos;
-                obj.gameObject.SetActive(true);
                 break;
         }
+
+        obj.position = data._pos;
+
+        if (data._scale == Vector3.zero)
+            obj.localScale = time._scale;
+        else
+        {
+            obj.localScale = data._scale;
+            time._scale = data._scale;
+        }
+
+        obj.gameObject.SetActive(true);
 
         pData._count++;
         if (pData._count >= pData._poolObject.childCount)
@@ -72,11 +80,14 @@ public class TimingData
 {
     public float _time;
     public CreateData[] _traps;
+    [HideInInspector]
+    public Vector3 _scale = Vector3.zero;
 }
 
 [System.Serializable]
 public class CreateData
 {
     public TrapCreator.PoolType _trap;
-    public Vector3 _pos; 
+    public Vector3 _pos;
+    public Vector3 _scale = Vector3.zero;
 }
