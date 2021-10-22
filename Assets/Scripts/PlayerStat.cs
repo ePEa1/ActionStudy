@@ -1,25 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PlayerStat : MonoBehaviour
 {
-    [SerializeField] float _dodgeCool;
+    [SerializeField] float _maxDodgeGage;
 
-    public float _nowDodgeCool { get; private set; }
-    public void SetDodgeCool() => _nowDodgeCool = _dodgeCool;
-    public bool _isDodgeOk { get { return _nowDodgeCool == 0 ? true : false; } }
+    public float _nowDodgeGage { get; private set; }
+    public void SetDodgeCool() => _nowDodgeGage -= 1;
+    public bool _isDodgeOk { get { return _nowDodgeGage >= 1 ? true : false; } }
 
     public bool _isNodamage { get; set; }
 
     private void Awake()
     {
         _isNodamage = false;
-        _nowDodgeCool = 0.0f;
+        _nowDodgeGage = _maxDodgeGage;
     }
 
     void Update()
     {
-        _nowDodgeCool = Mathf.Max(0, _nowDodgeCool - Time.deltaTime);
+        _nowDodgeGage = Mathf.Min(_maxDodgeGage, _nowDodgeGage + Time.deltaTime);
     }
 }
