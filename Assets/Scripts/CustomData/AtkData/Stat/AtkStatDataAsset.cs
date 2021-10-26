@@ -6,6 +6,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName ="AtkStatData", menuName = "Custom Data Asset/Attack Stat Data", order = int.MaxValue)]
 public class AtkStatDataAsset : ScriptableObject
 {
+    public float _AnimationSpeed = 2;
+
     [Header("Moving Data")]
     public float _moveRange;
     public AnimationCurve _moveCurve;

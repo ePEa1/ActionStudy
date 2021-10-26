@@ -15,6 +15,7 @@ public class PCDodgeAction : BaseAction
     [SerializeField] float _dodgePow;
     [SerializeField] AnimationCurve _dodgeAC;
     [SerializeField] float _dodgeSpeed;
+    [SerializeField] float _nodamageTime = 0.5f;
 
     Vector3 _dodgeDir = Vector3.zero;
 
@@ -32,6 +33,9 @@ public class PCDodgeAction : BaseAction
 
     public override void StartAction()
     {
+        StopCoroutine("SetNoDamage");
+        StartCoroutine("SetNoDamage");
+
         SetDodgeAnim();
 
         _nextState = "Idle";
@@ -108,5 +112,19 @@ public class PCDodgeAction : BaseAction
         float pow = (_dodgeAC.Evaluate(_time) - _dodgeAC.Evaluate(_beforeTime)) * _dodgePow;
         _owner.transform.position = FixedMoveVector(_owner.transform.position, _dodgeDir * pow, _wall);
         _beforeTime = _time;
+    }
+
+    IEnumerator SetNoDamage()
+    {
+        float time = 0;
+        _owner.GetComponent<PlayerStat>()._isNodamage = true;
+
+        while (time < _nodamageTime)
+        {
+            time += Time.deltaTime;
+            yield return 0;
+        }
+
+        _owner.GetComponent<PlayerStat>()._isNodamage = false;
     }
 }

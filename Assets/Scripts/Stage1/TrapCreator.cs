@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class TrapCreator : MonoBehaviour
 {
@@ -14,7 +15,9 @@ public class TrapCreator : MonoBehaviour
     public enum PoolType
     {
         FloorTrap = 0,
-        WallTrap = 1
+        RTrap = 1,
+        LTrap = 2,
+        Event = 3
     };
 
     void Update()
@@ -25,6 +28,7 @@ public class TrapCreator : MonoBehaviour
         {
             if (_data[_count]._time <= _time)
             {
+                _data[_count]._event.Invoke();
                 foreach (CreateData data in _data[_count]._traps)
                     CreateTrap(_data[_count], data);
                 _count++;
@@ -34,22 +38,8 @@ public class TrapCreator : MonoBehaviour
 
     void CreateTrap(TimingData time, CreateData data)
     {
-        Transform obj;
-        PoolData pData;
-        switch (data._trap)
-        {
-            case PoolType.FloorTrap:
-                pData = _objectPools[(int)PoolType.FloorTrap];
-                obj = pData._poolObject.GetChild(pData._count);
-                break;
-
-            default:
-                pData = _objectPools[(int)PoolType.WallTrap];
-                obj = pData._poolObject.GetChild(pData._count);
-                break;
-        }
-
-        obj.position = data._pos;
+        PoolData pData = _objectPools[(int)data._trap];
+        Transform obj = pData._poolObject.GetChild(pData._count);
 
         if (data._scale == Vector3.zero)
             obj.localScale = time._scale;
@@ -57,6 +47,14 @@ public class TrapCreator : MonoBehaviour
         {
             obj.localScale = data._scale;
             time._scale = data._scale;
+        }
+
+        if (data._pos == Vector3.zero)
+            obj.position = time._pos;
+        else
+        {
+            obj.position = data._pos;
+            time._pos = data._pos;
         }
 
         obj.gameObject.SetActive(true);
@@ -80,14 +78,15 @@ public class TimingData
 {
     public float _time;
     public CreateData[] _traps;
-    [HideInInspector]
-    public Vector3 _scale = Vector3.zero;
+    [HideInInspector] public Vector3 _scale = Vector3.zero;
+    [HideInInspector] public Vector3 _pos = Vector3.zero;
+    public UnityEvent _event;
 }
 
 [System.Serializable]
 public class CreateData
 {
     public TrapCreator.PoolType _trap;
-    public Vector3 _pos;
+    public Vector3 _pos = Vector3.zero;
     public Vector3 _scale = Vector3.zero;
 }

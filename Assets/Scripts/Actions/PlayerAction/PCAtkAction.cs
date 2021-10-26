@@ -16,6 +16,7 @@ public class PCAtkAction : BaseAction
 
     bool _isRotate = false;
 
+    float _animSpeed;
 
     #region Field - AttackDatas
     [Header("Atk Datas")]
@@ -52,8 +53,12 @@ public class PCAtkAction : BaseAction
         }
 
         //Moving----------------------------
-        _moveTimer += Time.deltaTime;
+        
         AtkStatDataAsset data = _atkStats[_nowCombo];
+
+        AnimatorStateInfo info = _animator.GetCurrentAnimatorStateInfo(0);
+        _animSpeed = (info.speed / data._AnimationSpeed);
+        _moveTimer += Time.deltaTime * _animSpeed;
         float speed = (data._moveCurve.Evaluate(_moveTimer) - data._moveCurve.Evaluate(_beforeTime)) * data._moveRange;
 
         Vector3 moveRay = _animator.transform.rotation * Vector3.forward;
@@ -97,7 +102,7 @@ public class PCAtkAction : BaseAction
 
     public override void FixedUpdateAction()
     {
-        _fixedTimer += Time.deltaTime;
+        _fixedTimer += Time.deltaTime * _animSpeed;
 
         //Play Effect-----------
         if (_particleNum < _playParticleTime.Length)

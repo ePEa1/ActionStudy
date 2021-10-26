@@ -105,15 +105,15 @@ GameObject:
   - component: {fileID: 5505533329514751077}
   - component: {fileID: 5505533329514751074}
   - component: {fileID: 5505533329514751075}
-  - component: {fileID: 5505533329514751072}
   - component: {fileID: 3448341808456328346}
+  - component: {fileID: 5304068338822899867}
   m_Layer: 0
   m_Name: QuadBoom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5505533329514751077
 Transform:
   m_ObjectHideFlags: 0
@@ -176,20 +176,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &5505533329514751072
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5505533329514751073}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!114 &3448341808456328346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,3 +190,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _boomTime: 1.2
   _floor: {fileID: 5505533328778620156}
+--- !u!65 &5304068338822899867
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5505533329514751073}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1.0000002, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d67e01e3dc974c4183bd32237462820, type: 3}
   m_Name: PCNormalAtk4Data
   m_EditorClassIdentifier: 
+  _AnimationSpeed: 1.8
   _moveRange: 2.5
   _moveCurve:
     serializedVersion: 2

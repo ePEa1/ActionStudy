@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public class PlayerStat : MonoBehaviour
 {
     [SerializeField] float _maxDodgeGage;
+    [SerializeField] float _DodgeGageFillSpeed = 1;
 
     public float _nowDodgeGage { get; private set; }
     public void SetDodgeCool() => _nowDodgeGage -= 1;
@@ -15,12 +15,13 @@ public class PlayerStat : MonoBehaviour
 
     private void Awake()
     {
+        
         _isNodamage = false;
         _nowDodgeGage = _maxDodgeGage;
     }
 
     void Update()
     {
-        _nowDodgeGage = Mathf.Min(_maxDodgeGage, _nowDodgeGage + Time.deltaTime);
+        _nowDodgeGage = Mathf.Min(_maxDodgeGage, _nowDodgeGage + Time.deltaTime * _DodgeGageFillSpeed);
     }
 }

@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public class LevelManager : MonoBehaviour
 {
     [SerializeField] UnityEvent _startEvent;
+    [SerializeField] UnityEvent _clearEvent;
     [SerializeField] Transform _clearWall;
 
     bool _isClear = false;
@@ -17,15 +18,18 @@ public class LevelManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.C))
-            _isClear = true;
-
         if (_isClear)
-            FinishLevel();
+            OpenWall();
     }
 
     public void FinishLevel()
     {
-        _clearWall.position += Vector3.down * Time.deltaTime;
+        _clearEvent.Invoke();
+        _isClear = true;
+    }
+
+    void OpenWall()
+    {
+        _clearWall.position += Vector3.down * Time.deltaTime * 4;
     }
 }

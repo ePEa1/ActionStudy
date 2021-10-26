@@ -9,8 +9,12 @@ public class PlayerDodgeBar : MonoBehaviour
 
     [SerializeField] Slider[] _slider;
 
+    float _maxDodgeGage;
+
     void Start()
     {
+        _maxDodgeGage = _stat._nowDodgeGage;
+
         for(int i=0;i<_slider.Length;i++)
         {
             _slider[i].maxValue = i + 1;
@@ -24,5 +28,13 @@ public class PlayerDodgeBar : MonoBehaviour
     {
         foreach (Slider s in _slider)
             s.value = _stat._nowDodgeGage;
+
+        if (_slider[_slider.Length - 1].value == _maxDodgeGage && _slider[0].gameObject.activeSelf)
+            foreach (Slider bar in _slider)
+                bar.gameObject.SetActive(false);
+
+        if (_slider[_slider.Length - 1].value < _maxDodgeGage && !_slider[0].gameObject.activeSelf)
+            foreach (Slider bar in _slider)
+                bar.gameObject.SetActive(true);
     }
 }
